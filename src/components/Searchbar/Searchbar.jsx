@@ -1,27 +1,34 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import s from "./SearchBar.module.css";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
  class SearchBar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
   };
-
+//локальный state. храним пока набираем инпут
   state = {
     searchQuery: "",
-  };
+   };
+   
   handleChange = (event) => {
-    this.setState({ searchQuery: event.target.value.toLowerCase() });
-  };
+    this.setState({ searchQuery: event.currentTarget.value.toLowerCase() });
+   };
   
+  //когда отправляем запрос по Submit. очистка формы. не отправляем пустую сторку
   handleSubmit = (event) => {
     event.preventDefault();
+//нет рендера картинок при пробеле если trim
+    if (this.state.searchQuery.trim() === '') { 
+     return toast.error("Enter search query");
+    }
+
     this.props.onSubmit(this.state.searchQuery);
-    this.resetState();
-  };
-  
-  resetState = () => {
-    this.setState({ value: "" });
+    //очиста формы сразу после Submit 
+    this.setState({ searchQuery: "" });
+    
   };
 
   render() {
@@ -36,8 +43,8 @@ import s from "./SearchBar.module.css";
           <input
             className={s.SearchForm_input}
             type="text"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
             value={searchQuery}
             onChange={this.handleChange}

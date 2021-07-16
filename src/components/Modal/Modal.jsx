@@ -8,7 +8,7 @@ const modalRoot = document.querySelector("#modal-root");
 
 export default class Modal extends Component {
   static propTypes = {
-    image: PropTypes.objectOf(PropTypes.string).isRequired,
+    image: PropTypes.string.isRequired,
     onClose: PropTypes.func.isRequired,
   };
 
@@ -16,15 +16,15 @@ export default class Modal extends Component {
     console.log('Modal componentDidMount');
     window.addEventListener('keydown', this.handleKeyDown);
   }
-  //метод очистки слушателей, HTTP-запросов и т д
+
+  //метод очистки слушателей, таймеры, HTTP-запросов и т д
   componentWillUnmount() {
-        console.log('Modal componentWillUnmount');
+       console.log('Modal componentWillUnmount');
        window.removeEventListener('keydown', this.handleKeyDown);
   }
  handleKeyDown = e => {
     if (e.code === 'Escape') {
       console.log('Нажали ESC, нужно закрыть модалку');
-
       this.props.onClose();
     }
   };
