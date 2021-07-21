@@ -47,7 +47,8 @@ class App extends Component {
           status: 'resolved',
         })),
       )
-      .then(this.handleScroll)
+    this.handleScroll();
+//       .then(this.handleScroll)
       .catch(error => this.setState({ error }));
   };
 
@@ -85,13 +86,13 @@ class App extends Component {
   };
 
   handleScroll = () => {
-    setTimeout(() => {
+//     setTimeout(() => {
       //без setTimeoutне работает
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth',
       });
-    }, 800);
+//     }, 800);
   };
 
   render() {
