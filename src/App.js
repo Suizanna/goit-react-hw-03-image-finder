@@ -14,7 +14,6 @@ import apiService from './components/services/apiService';
 //   RESOLVED: 'resolved',
 //   REJECTED: 'rejected',
 // };
-
 class App extends Component {
   state = {
     searchQuery: '',
@@ -25,33 +24,25 @@ class App extends Component {
     modalContent: '',
     showModal: false,
   };
-
   componentDidUpdate(prevProps, prevState) {
-    console.log('App componentDidUpdate');
     const { searchQuery, page } = this.state;
-    //всегда проверка через if, чтобы не зациклить
     if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       this.setState({ status: 'pending' });
-
       this.renderImages();
     }
   }
-  renderImages = () => {
+  renderImages = async () => {
     const { searchQuery, page } = this.state;
-
-    apiService
+    return apiService
       .fetchImages(searchQuery, page)
-      .then(response =>
+      .then(response => {
         this.setState(prevState => ({
           images: [...prevState.images, ...response.hits],
           status: 'resolved',
-        })),
-      )
-    this.handleScroll();
-//       .then(this.handleScroll)
+        }));
+      })
       .catch(error => this.setState({ error }));
   };
-
   //при onSubmit на <SearchBar/>
   // очищаем стеит и записываем новый searchQuery который ввели
   hadleChangeQuery = searchQuery => {
@@ -67,46 +58,37 @@ class App extends Component {
     }
     this.setState({ searchQuery }); //и тогда не нужен
   };
-
   toggleModal = () => {
     this.setState(state => ({
       showModal: !state.showModal,
     }));
   };
-
   modalContentSet = itemId => {
     const { images } = this.state;
     const element = images.find(({ id }) => id === itemId);
     this.setState({ modalContent: element.largeImageURL });
   };
-
   //кнопка загрузить еще
   onLoadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-
   handleScroll = () => {
-//     setTimeout(() => {
-      //без setTimeoutне работает
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth',
-      });
-//     }, 800);
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   };
-
   render() {
     // console.log('App render');
     const { showModal, images, modalContent, status } = this.state;
     const pending = status === 'pending';
-
     const resolved = status === 'resolved';
-
     return (
       <div className="App">
         <SearchBar onSubmit={this.hadleChangeQuery} />
         {images.length > 0 && (
           <ImageGallery
+            scrollList={this.handleScroll}
             images={images}
             onClick={this.toggleModal}
             onItemClick={this.modalContentSet}
@@ -116,7 +98,6 @@ class App extends Component {
         {pending && <Spinner />}
         {resolved && images.length >= 12 && (
           <Button name="Load more" onPress={this.onLoadMore} />
-          //onPress-это просто имя пропса,назыв можна как хочешь. Это не событие
         )}
         <ToastContainer autoClose={3000} />
       </div>
