@@ -6,13 +6,13 @@ import s from "./ImageGalleryItem.module.css";
 
 class ImageGalleryItem extends Component {
   static propTypes = {
-    onItemClick: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     webformatURL: PropTypes.string.isRequired,
   };
 
   modalContent = (id) => {
-    this.props.onItemClick(id);
+    this.props.onSelect(id);
   };
   render() {
     const { id, webformatURL } = this.props;

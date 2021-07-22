@@ -5,7 +5,7 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 class ImageGallery extends Component {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
-    onItemClick: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
     images: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
@@ -18,7 +18,7 @@ class ImageGallery extends Component {
     }
   };
   render() {
-    const { images, onItemClick } = this.props;
+    const { images, onSelect } = this.props;
     return (
       <ul
         onLoad={() => {
@@ -30,7 +30,7 @@ class ImageGallery extends Component {
         {images &&
           images.map(image => (
             <li key={image.id} className={s.ImageGalleryItem}>
-              <ImageGalleryItem {...image} onItemClick={onItemClick} />
+              <ImageGalleryItem {...image} onSelect={onSelect} />
             </li>
           ))}
       </ul>

@@ -91,7 +91,7 @@ class App extends Component {
             scrollList={this.handleScroll}
             images={images}
             onClick={this.toggleModal}
-            onItemClick={this.modalContentSet}
+            onSelect={this.modalContentSet}
           />
         )}
         {showModal && <Modal image={modalContent} onClose={this.toggleModal} />}
